@@ -8,12 +8,11 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by Administrator on 2019/8/5.
  */
-public class zookeeperTest {
+public class ZookeeperTest {
     private static CountDownLatch cound = new CountDownLatch(1);
     private static volatile Boolean flag = true;
     public static void main(String[] args) throws IOException, InterruptedException {
         final ZooKeeper[] zk = {null};
-
         new Thread(() -> {
             try {
                 zk[0] = new ZooKeeper("127.0.0.1:2181",2000,null);

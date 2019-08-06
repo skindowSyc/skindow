@@ -7,3 +7,4 @@
 ## 开发中
 ## O(∩_∩)O
 ## 8.5 学习zookeeper中
+## 8.6 学习zookeeper java watcher监听

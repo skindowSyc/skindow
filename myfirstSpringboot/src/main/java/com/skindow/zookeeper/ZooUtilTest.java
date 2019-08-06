@@ -24,5 +24,11 @@ public class ZooUtilTest {
 //        zt.updateZKNodeData("/Skindow","8月5号测试下班");
 //        log.info("update after" + zt.readData("/Skindow"));
         ZkWatchTest zt = new ZkWatchTest("127.0.0.1:2181",2000);
+//        zt.deteleZKNode("/test_watcher");//不支持递归删除 这一行代码会报错 因为该节点下存在watcher_children节点
+        zt.createZNode("/test_watcher","8月6号测试");
+        zt.createZNode("/test_watcher/watcher_children","wc_test");
+        log.info("watcher_children read data => " + zt.readData("/test_watcher/watcher_children"));
+        zt.deteleZKNode("/test_watcher/watcher_children");
+        zt.updateZKNodeData("/test_watcher","8月6号测试");
     }
 }

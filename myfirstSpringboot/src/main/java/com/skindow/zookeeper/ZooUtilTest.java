@@ -17,6 +17,7 @@ public class ZooUtilTest {
 //        List<String> skindow = zt.getChild("/Skindow");
 //        String s = skindow.stream().collect(Collectors.joining(",")).toString();
 //        log.info("skindow ==>"  + s);
+
 //        String s1 = zt.readData("/Skindow");
 //        log.info("s1 ==》" + s1);
 //        zt.deteleZKNode("/Skindow/no_1");

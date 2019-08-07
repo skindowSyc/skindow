@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						 http://code.alibabatech.com/schema/dubbo
+						  http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供程序的应用程序名称，用于跟踪依赖关系 -->
+	<dubbo:application name="skindow-provider"/>
+	<!-- 使用zookeeper注册中心导出服务-->
+	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" check="false" />
+	<!-- 使用dubbo协议导出端口20880上的服务-->
+	<dubbo:protocol name="dubbo" port="20880"/>
+	<!--服务实现，与普通本地bean相同 -->
+	<bean id="demoService" class="com.skindow.serviceImpl.DemoServiceImpl"/>
+	<!-- 声明要导出的服务接口 -->
+	<dubbo:service interface="com.skindow.service.DemoService" ref="demoService" version="1.0.0" timeout="10000" retries="0"/>
+</beans>

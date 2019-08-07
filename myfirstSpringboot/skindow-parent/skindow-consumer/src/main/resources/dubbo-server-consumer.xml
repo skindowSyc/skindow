@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						 http://code.alibabatech.com/schema/dubbo
+						  http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<!-- 使用者的应用程序名称，用于跟踪依赖关系(不是匹配标准)，不要将其设置为provider -->
+	<dubbo:application name="skindow-consumer"/>
+	<!-- use multicast registry center to discover service -->
+	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" check="false" />
+	<!-- 为远程服务生成代理，然后可以使用与本地普通接口 -->
+	<dubbo:reference id="demoService" check="false" interface="com.skindow.service.DemoService" version="1.1.0" timeout="10000" retries="0"/>
+</beans>

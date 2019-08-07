@@ -13,5 +13,5 @@
 	<!-- use multicast registry center to discover service -->
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" check="false" />
 	<!-- 为远程服务生成代理，然后可以使用与本地普通接口 -->
-	<dubbo:reference id="demoService" check="false" interface="com.skindow.service.DemoService" version="1.1.0" timeout="10000" retries="0"/>
+	<dubbo:reference id="demoService" check="false" interface="com.skindow.service.DemoService" version="1.0.0" timeout="10000" retries="0"/>
 </beans>

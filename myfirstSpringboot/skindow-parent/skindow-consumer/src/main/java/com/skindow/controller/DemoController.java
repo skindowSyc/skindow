@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -16,10 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DemoController {
     @Autowired
     private DemoService demoService;
-    @RequestMapping("/rest")
+    @RequestMapping("/test")
     @ResponseBody
     public String test()
     {
         return demoService.sayHello("skindow");
+    }
+    @RequestMapping("/testAop")
+    @ResponseBody
+    public String testAop(@RequestParam(value="name") String name,@RequestParam(value="age") Integer age)
+    {
+        return demoService.sayHello(name,age);
     }
 }

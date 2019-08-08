@@ -12,4 +12,9 @@ public class DemoServiceImpl implements DemoService {
     public String sayHello(String name) {
         return "hey,my name is " + name;
     }
+
+    @Override
+    public String sayHello(String name, Integer age) {
+        return "hey,my name is " + name + " I'm "+ age +" years old";
+    }
 }

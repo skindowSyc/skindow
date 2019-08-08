@@ -5,4 +5,5 @@ package com.skindow.service;
  */
 public interface DemoService {
         String sayHello(String name);
+        String sayHello(String name,Integer age);
 }

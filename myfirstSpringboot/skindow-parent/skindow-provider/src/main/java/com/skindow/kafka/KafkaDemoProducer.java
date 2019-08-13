@@ -5,12 +5,12 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -32,20 +32,26 @@ public class KafkaDemoProducer implements Runnable{
     private AtomicInteger i = new AtomicInteger(0);
     //生产间隔
     private long times;
+    private KafkaProducer kafkaProducer;
+    private CountDownLatch latch;
     public KafkaDemoProducer(Builder builder){
         this.toptic = builder.toptic;
         this.service = builder.service;
         this.id = builder.id;
         this.times = builder.times;
+        this.latch = builder.latch;
         this.initProperties();
+        kafkaProducer = new KafkaProducer<String, String>(props);
     }
     public void stop()
     {
+        kafkaProducer.flush();
+        kafkaProducer.close();
         flag = false;
     }
     public KafkaProducer<String,String> getKafkaProducer()
     {
-        return new KafkaProducer<String, String>(props);
+        return kafkaProducer;
     }
     public Properties getProperties()
     {
@@ -79,9 +85,15 @@ public class KafkaDemoProducer implements Runnable{
         private String service;
         private String id;
         private long times;
+        private CountDownLatch latch;
         public Builder toptic(String toptic)
         {
             this.toptic = toptic;
+            return this;
+        }
+        public Builder latch(CountDownLatch latch)
+        {
+            this.latch = latch;
             return this;
         }
         public Builder service(String service)
@@ -116,7 +128,7 @@ public class KafkaDemoProducer implements Runnable{
             }
             String key = id + "-key-" + i;
             String value = id + " Under production" + i;
-            getKafkaProducer().send(new ProducerRecord<String,String>(toptic, key, value), new Callback() {
+            kafkaProducer.send(new ProducerRecord<String,String>(toptic, key, value), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     Date date = new Date(recordMetadata.timestamp());
@@ -124,7 +136,8 @@ public class KafkaDemoProducer implements Runnable{
                     String format = sdf.format(date);
                     log.info(id + "于"+ format + "生产"+ key +"完成");
                     i.incrementAndGet();
-                    log.info(id + "已成功生产" + i + "条消息");
+                    log.info(id + "已成功生产" + (recordMetadata.offset() + 1) + "条消息");
+                    latch.countDown();
                 }
             });
 

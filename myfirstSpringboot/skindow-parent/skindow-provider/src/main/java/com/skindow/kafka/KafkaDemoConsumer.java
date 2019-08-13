@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 
 import java.time.Duration;
@@ -30,16 +29,18 @@ public class KafkaDemoConsumer implements Runnable{
     private AtomicInteger i = new AtomicInteger(0);
     //消费间隔
     private long times;
+    private KafkaConsumer<String, String> kafkaConsumer;
     public KafkaDemoConsumer(Builder builder){
         this.toptic = builder.toptic;
         this.service = builder.service;
         this.id = builder.id;
         this.times = builder.times;
         this.initProperties();
+        kafkaConsumer =  new KafkaConsumer<String, String>(props);
     }
     public KafkaConsumer<String,String> getKafkaConsumer()
     {
-        return new KafkaConsumer<String, String>(props);
+        return kafkaConsumer;
     }
     public void initProperties()
     {
@@ -89,6 +90,11 @@ public class KafkaDemoConsumer implements Runnable{
             return new KafkaDemoConsumer(this);
         }
     }
+    public void stop()
+    {
+        kafkaConsumer.close();
+        flag = false;
+    }
     @Override
     public void run() {
         while (flag) {
@@ -98,15 +104,14 @@ public class KafkaDemoConsumer implements Runnable{
             } catch (InterruptedException e) {
                 log.error("Thread sleep error: ", e);
             }
-            KafkaConsumer<String, String> kafkaConsumer = getKafkaConsumer();
             kafkaConsumer.subscribe(Arrays.asList(toptic));
             Duration duration = Duration.ofMillis(500);
             //频率
             ConsumerRecords<String, String> poll = kafkaConsumer.poll(duration);
             for (ConsumerRecord<String, String> record : poll)
             {
-                log.info("======================");
-                log.info(id + " 消费者offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+                log.info("=========消化中===========");
+                log.info(id + " 消费者offset = {}, key = {}, value = {}", record.offset(), record.key(), record.value());
             }
         }
     }

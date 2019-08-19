@@ -29,4 +29,16 @@ public class DemoController {
     {
         return demoService.sayHello(name,age);
     }
+    @RequestMapping("/setRedis")
+    @ResponseBody
+    public String setRedis(@RequestParam(value="value") String value,@RequestParam(value="key") String key)
+    {
+        return demoService.testRedis(key,value);
+    }
+    @RequestMapping("/getRedis")
+    @ResponseBody
+    public String getRedis(@RequestParam(value="key") String key)
+    {
+        return demoService.getValueByKey(key);
+    }
 }

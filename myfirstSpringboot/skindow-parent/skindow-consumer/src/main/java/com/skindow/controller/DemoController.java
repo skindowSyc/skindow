@@ -1,15 +1,15 @@
 package com.skindow.controller;
 
 import com.skindow.service.DemoService;
+import com.skindow.service.pojo.Book;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
 
 /**
  * Created by Administrator on 2019/8/7.
@@ -52,5 +52,13 @@ public class DemoController {
     public String getRedis(@RequestParam(value="key") String key)
     {
         return demoService.getValueByKey(key);
+    }
+
+    @RequestMapping(value="/setBook",method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(httpMethod = "POST", value = "在redis中持久化对象Book", consumes = "application/json")
+    public String Set(@RequestParam(value="key") String key,@RequestBody Book book)
+    {
+        return  demoService.setBook(key,book);
     }
 }

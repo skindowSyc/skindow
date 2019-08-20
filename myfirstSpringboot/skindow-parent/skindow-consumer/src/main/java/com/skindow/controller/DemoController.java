@@ -1,7 +1,7 @@
 package com.skindow.controller;
 
 import com.skindow.service.DemoService;
-import com.skindow.service.pojo.Book;
+import com.skindow.pojo.Book;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

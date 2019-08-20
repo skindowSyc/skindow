@@ -3,7 +3,7 @@ package com.skindow.serviceImpl;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.skindow.service.DemoService;
-import com.skindow.service.pojo.Book;
+import com.skindow.pojo.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 

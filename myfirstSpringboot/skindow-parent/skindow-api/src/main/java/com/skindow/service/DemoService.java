@@ -1,7 +1,7 @@
 package com.skindow.service;
 
 
-import com.skindow.service.pojo.Book;
+import com.skindow.pojo.Book;
 
 /**
  * Created by Administrator on 2019/8/7.

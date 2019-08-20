@@ -1,4 +1,4 @@
-package com.skindow.service.pojo;
+package com.skindow.pojo;
 
 import lombok.Data;
 

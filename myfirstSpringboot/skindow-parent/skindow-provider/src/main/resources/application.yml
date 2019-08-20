@@ -16,3 +16,21 @@ spring:
         max-wait:  -1
         # 最大活跃连接数，负数为不限制
         max-active: -1
+  datasource:
+    username: root
+    password: ai1194169073
+    url: jdbc:mysql://localhost:3306/skindow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: ../skindow-api/com.skindow.pojo
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
+server:
+  port: 8093

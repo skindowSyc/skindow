@@ -3,11 +3,11 @@ package com.skindow.logAop;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.MethodSignature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +32,6 @@ public class LogAspect {
         Signature signature = joinPoint.getSignature();
         //返回目标方法所有的参数
         Object[] args = joinPoint.getArgs();
-        log.info("signature.toString()" + signature.toString());
         log.info("{} 调用时间：{}", signature, sdf.format(startDate));
         long start = System.currentTimeMillis();
         //用改变后的参数执行目标方法
@@ -42,7 +41,8 @@ public class LogAspect {
         String time = this.formatExecuteTime(end - start);
         log.info("{} 执行时间：{}", signature.toString(), time);
         (new Thread(() -> {
-            log.info("{} 方法入参{}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> a.toString()).collect(Collectors.joining(",")));
+            log.info("{} 方法入参 {}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> a.toString()).collect(Collectors.joining(",")));
+            log.info("{} 方法出参 {}",signature.toString(), object);
         })).start();
         return object;
     }

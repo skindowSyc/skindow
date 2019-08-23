@@ -38,5 +38,6 @@ public class ForTestMain {
         ForImpl_forTest_5 forTest5 = new ForImpl_forTest_5(size);
         forTest5 = (ForImpl_forTest_5)new MyCglibProxyFactory(forTest5).getProxyInstance();
         forTest5.doSomething();
+
     }
 }

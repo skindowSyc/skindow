@@ -60,9 +60,9 @@ public class MongoUserDao implements MongoUserService{
         {
             update.set("age", user.getAge());
         }
-        if (user.getAge() != null)
+        if (user.getName() != null)
         {
-           update.set("age", user.getAge());
+           update.set("name", user.getAge());
         }
         if (user.getAddress() != null)
         {

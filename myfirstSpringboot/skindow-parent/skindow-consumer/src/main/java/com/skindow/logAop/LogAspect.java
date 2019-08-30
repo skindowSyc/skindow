@@ -1,5 +1,6 @@
 package com.skindow.logAop;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -41,7 +42,7 @@ public class LogAspect {
         String time = this.formatExecuteTime(end - start);
         log.info("{} 执行时间：{}", signature.toString(), time);
         (new Thread(() -> {
-            log.info("{} 方法入参 {}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> a.toString()).collect(Collectors.joining(",")));
+            log.info("{} 方法入参 {}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> JSON.toJSONString(a)).collect(Collectors.joining(",")));
             log.info("{} 方法出参 {}",signature.toString(), object);
         })).start();
         return object;

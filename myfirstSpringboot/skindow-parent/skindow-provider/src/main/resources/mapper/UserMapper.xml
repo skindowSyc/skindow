@@ -90,4 +90,14 @@
       country = #{country,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateUserBatch" parameterType="java.util.List">
+    <foreach collection="users" index="index" item="item" separator=";">
+      update user
+      set name = #{item.name,jdbcType=VARCHAR},
+      age = #{item.age,jdbcType=INTEGER},
+      address = #{item.address,jdbcType=VARCHAR},
+      country = #{item.country,jdbcType=VARCHAR}
+      where id = #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
 </mapper>

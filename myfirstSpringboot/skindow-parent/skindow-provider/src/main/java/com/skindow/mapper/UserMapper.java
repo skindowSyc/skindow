@@ -1,6 +1,9 @@
 package com.skindow.mapper;
 
 import com.skindow.pojo.User;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    int updateUserBatch(@Param("users") List<User> users);
 }

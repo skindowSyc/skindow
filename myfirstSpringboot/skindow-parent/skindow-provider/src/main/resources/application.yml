@@ -21,7 +21,9 @@ spring:
     password: ai1194169073
     url: jdbc:mysql://localhost:3306/skindow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
     driver-class-name: com.mysql.jdbc.Driver
-
+  data:
+      mongodb:
+        uri: mongodb://localhost:27017/test
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: ../skindow-api/com.skindow.pojo

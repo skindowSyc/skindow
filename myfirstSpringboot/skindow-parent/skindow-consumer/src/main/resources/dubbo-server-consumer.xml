@@ -15,4 +15,5 @@
 	<!-- 为远程服务生成代理，然后可以使用与本地普通接口 -->
 	<dubbo:reference id="demoService" check="false" interface="com.skindow.service.DemoService" version="1.0.0" timeout="10000" retries="0"/>
 	<dubbo:reference id="userService" check="false" interface="com.skindow.service.UserService" version="1.0.0" timeout="10000" retries="0"/>
+	<dubbo:reference id="MongoUserService" check="false" interface="com.skindow.MongoDBService.MongoUserService" version="1.0.0" timeout="10000" retries="0"/>
 </beans>

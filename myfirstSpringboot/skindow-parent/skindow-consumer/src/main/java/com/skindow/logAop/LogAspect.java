@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @Aspect
 @Slf4j
 public class LogAspect {
+    private static ExecutorService executorService = Executors.newCachedThreadPool();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Pointcut("execution(public * com.skindow.controller..*.*(..))")//切入点描述 这个是controller包的切入点
     public void webLog() {//签名，可以理解成这个切入点的一个名称
@@ -41,10 +44,13 @@ public class LogAspect {
         long end = System.currentTimeMillis();
         String time = this.formatExecuteTime(end - start);
         log.info("{} 执行时间：{}", signature.toString(), time);
-        (new Thread(() -> {
-            log.info("{} 方法入参 {}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> JSON.toJSONString(a)).collect(Collectors.joining(",")));
-            log.info("{} 方法出参 {}",signature.toString(), object);
-        })).start();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                log.info("{} 方法入参 {}", signature.toString(),new ArrayList<>(Arrays.asList(args)).stream().map(a -> JSON.toJSONString(a)).collect(Collectors.joining(",")));
+                log.info("{} 方法出参 {}",signature.toString(), object);
+            }
+        });
         return object;
     }
 

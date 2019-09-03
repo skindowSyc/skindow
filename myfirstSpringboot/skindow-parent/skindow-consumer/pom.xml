@@ -98,6 +98,12 @@
 			<version>2.9.2</version>
 		</dependency>
 		<!-- swagger2 end -->
+		<!-- freemarker start -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+		<!-- freemarker end -->
 	</dependencies>
 
 

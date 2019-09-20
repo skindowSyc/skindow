@@ -1,0 +1,9 @@
+spring:
+  datasource:
+      url: jdbc:mysql://localhost:3306/user_auth?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+      username: root
+      password: ai1194169073
+mybatis:
+   mapperLocations: classpath:/mapper/*.xml
+server:
+  port: 8094

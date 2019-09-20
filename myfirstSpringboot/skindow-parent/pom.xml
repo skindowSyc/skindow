@@ -41,5 +41,7 @@
 		<module>skindow-api</module>
 		<module>skindow-consumer</module>
 		<module>skindow-provider</module>
+		<module>skindow-userAuth</module>
+		<module>skindow-backstage</module>
 	</modules>
 </project>

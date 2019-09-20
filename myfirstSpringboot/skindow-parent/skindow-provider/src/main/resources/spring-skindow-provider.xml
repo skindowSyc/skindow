@@ -17,8 +17,8 @@
 	<bean id="demoService" class="com.skindow.serviceImpl.DemoServiceImpl"/>
 	<!-- 声明要导出的服务接口 -->
 	<dubbo:service interface="com.skindow.service.DemoService" ref="demoService" version="1.0.0" timeout="10000" retries="0"/>
-	<bean id="userService" class="com.skindow.serviceImpl.UserServiceImpl"/>
-	<dubbo:service interface="com.skindow.service.UserService" ref="userService" version="1.0.0" timeout="10000" retries="0"/>
+	<bean id="userProviderService" class="com.skindow.serviceImpl.UserServiceImpl"/>
+	<dubbo:service interface="com.skindow.service.UserService" ref="userProviderService" version="1.0.0" timeout="10000" retries="0"/>
 	<bean id="MongoUserService" class="com.skindow.mongoDao.MongoUserDao"/>
 	<dubbo:service interface="com.skindow.MongoDBService.MongoUserService" ref="MongoUserService" version="1.0.0" timeout="10000" retries="0"/>
 </beans>

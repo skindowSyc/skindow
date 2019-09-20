@@ -8,3 +8,4 @@
 #### [dubbo基础](https://blog.csdn.net/qq_42255763/article/details/98621170)
 #### [mysql安装](https://blog.csdn.net/qq_42255763/article/details/99829897)
 #### [redis安装](https://blog.csdn.net/qq_42255763/article/details/99726802)
+#### [nodeJs安装后端服务启动](https://blog.csdn.net/qq_42255763/article/details/101050756)

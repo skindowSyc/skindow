@@ -23,7 +23,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 80,
     autoOpenBrowser: true,
     autoOpenPage: '/login',

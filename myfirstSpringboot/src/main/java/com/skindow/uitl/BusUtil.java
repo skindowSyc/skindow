@@ -1,5 +1,6 @@
 package com.skindow.uitl;
 
+import com.skindow.annotion.AttributeComForObject;
 import com.skindow.annotion.AttributeComparison;
 import com.skindow.uitl.bean.CheckResult;
 
@@ -14,16 +15,18 @@ import java.util.List;
  * Created by skindow on 2019/9/24.
  */
 public class BusUtil {
-    /**  比较个对象属性的值是否相等 配合注解AttributeComparison使用
+    /**比较个对象属性的值是否相等 配合注解AttributeComparison使用
      * @param o
      * @param n
+     * @param results
      * @return
      * @throws Exception
      */
-    public static List<CheckResult> attributeComparison(Object o, Object n) throws Exception {
+    public static List<CheckResult> attributeComparison(Object o, Object n,List<CheckResult> results) throws Exception
+    {
         if (o == null || n == null)
         {
-            throw new NullPointerException("Please enter a quality object!");
+            return results;
         }
         Class<?> oClass = o.getClass();
         Class<?> nClass = n.getClass();
@@ -34,26 +37,48 @@ public class BusUtil {
         Field[] ofields = oClass.getDeclaredFields();
         if (ofields == null || ofields.length == 0)
         {
-            throw new Exception("This class has no member variables!");
+            return results;
         }
-        List<CheckResult> results = new ArrayList<>(ofields.length);
         CheckResult checkResult = null;
         for (Field ofield : ofields)
         {
             ofield.setAccessible(true);
-            if (!hashAttributeComparison(ofield) || !isCheck(ofield))
+            if (hashAnnotionByclass(ofield,AttributeComForObject.class))
             {
-                continue;
+                Object o1 = ofield.get(o);
+                Field nfield = nClass.getDeclaredField(ofield.getName());
+                nfield.setAccessible(true);
+                Object n1 = nfield.get(n);
+                attributeComparison(o1,n1,results);
             }
-            Field nfield = nClass.getDeclaredField(ofield.getName());
-            nfield.setAccessible(true);
-            if (nfield == null)
+            else
             {
-                throw new Exception("Inconsistent object properties one is " + ofield.getName() + " another one is " + nfield.getName());
+                fileCheck(o, n, nClass, results, ofield);
             }
-            compareValue(o, n, results, ofield, nfield);
         }
         return results;
+    }
+
+    /** 比对成员变量属性
+     * @param o
+     * @param n
+     * @param nClass
+     * @param results
+     * @param ofield
+     * @throws Exception
+     */
+    private static void fileCheck(Object o, Object n, Class<?> nClass, List<CheckResult> results, Field ofield) throws Exception {
+        if (!hashAnnotionByclass(ofield,AttributeComparison.class) || !isCheck(ofield))
+        {
+            return;
+        }
+        Field nfield = nClass.getDeclaredField(ofield.getName());
+        nfield.setAccessible(true);
+        if (nfield == null)
+        {
+            throw new Exception("Inconsistent object properties one is " + ofield.getName() + " another one is " + nfield.getName());
+        }
+        compareValue(o, n, results, ofield, nfield);
     }
 
     /** 开始比对属性
@@ -139,7 +164,7 @@ public class BusUtil {
      * @throws Exception
      */
     public static String getAnnoStr(Field field) throws Exception {
-        AttributeComparison attributeComparison = getAttributeComparison(field);
+        AttributeComparison attributeComparison = (AttributeComparison)getAttributeComparison(field,AttributeComparison.class);
         if (attributeComparison == null)
         {
             throw new Exception("The object has no concern about the solution");
@@ -176,6 +201,10 @@ public class BusUtil {
         {
             return false;
         }
+        if (hashAnnotionByclass(ofield, AttributeComForObject.class))
+        {
+            return false;
+        }
         return true;
     }
 
@@ -183,7 +212,7 @@ public class BusUtil {
      * @param field
      * @return
      */
-    public static AttributeComparison getAttributeComparison(Field field)
+    public static Annotation getAttributeComparison(Field field,Class c)
     {
         Annotation[] annotations = field.getAnnotations();
         if (annotations == null || annotations.length == 0)
@@ -192,9 +221,9 @@ public class BusUtil {
         }
         for (Annotation annotation : annotations)
         {
-            if (annotation.annotationType().getTypeName().equals(AttributeComparison.class.getName()))
+            if (annotation.annotationType().getTypeName().equals(c.getName()))
             {
-                return (AttributeComparison)annotation;
+                return annotation;
             }
         }
         return null;
@@ -204,20 +233,13 @@ public class BusUtil {
      * @param ofield
      * @return
      */
-    private static Boolean hashAttributeComparison(Field ofield)
+    private static Boolean hashAnnotionByclass(Field ofield,Class c)
     {
-        Annotation[] annotations = ofield.getAnnotations();
-        if (annotations == null || annotations.length == 0)
+        Annotation attributeComparison = getAttributeComparison(ofield, c);
+        if (attributeComparison == null)
         {
             return false;
         }
-        for (Annotation annotation : annotations)
-        {
-            if (annotation.annotationType().getTypeName().equals(AttributeComparison.class.getName()))
-            {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }

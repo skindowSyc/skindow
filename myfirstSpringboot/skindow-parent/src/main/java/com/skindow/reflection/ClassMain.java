@@ -1,13 +1,17 @@
 package com.skindow.reflection;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
+
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -48,12 +52,21 @@ public class ClassMain {
 
         logger.info("reflectionTestClass.getConstructors(); {}", Arrays.stream(reflectionTestClass.getConstructors()).map(a -> a.toString()).collect(Collectors.joining(","))); //获取构造函数的数组
         Constructor<?>[] constructors = reflectionTestClass.getConstructors();//获取构造函数的数组
-        Constructor<?> constructor = constructors[0];
         //通过构造函数实例化对象
         Constructor<ReflectionTest> constructor1 = reflectionTestClass.getConstructor(String.class, Integer.class, BigDecimal.class, Date.class);
         ReflectionTest reflectionTest2 = constructor1.newInstance("1", new Integer(2), new BigDecimal(2), new Date());
         logger.info("reflectionTest2; {}", reflectionTest2.toString());
         logger.info("reflectionTest2.getDate(); {}",reflectionTest2.getDate());
+
+        //获取泛型的类型
+        List<ReflectionTest> list = new ArrayList<ReflectionTest>(0);
+        list.add(new ReflectionTest());
+        Type type = ((ParameterizedType) list.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+        logger.info("type : {}",type.getTypeName());
+
+        Class type1 = (Class)((ParameterizedType) list.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        logger.info("type1 : {}",type1.getTypeName());
 
     }
 }

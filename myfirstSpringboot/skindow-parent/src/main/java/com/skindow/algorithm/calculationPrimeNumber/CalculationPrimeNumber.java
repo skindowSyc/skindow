@@ -6,7 +6,7 @@ package com.skindow.algorithm.calculationPrimeNumber;
  * @ CreateDate    :  2020/1/13$ 14:49$
  */
 public class CalculationPrimeNumber {
-    private static final Integer START_NUM = 100;
+    private static final Integer START_NUM = 0;
 
     private static final Integer END_NUM = 200;
 

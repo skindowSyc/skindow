@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author songhaozhi
@@ -15,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.songhaozhi.mayday.mapper")
 @EnableTransactionManagement
 @EnableCaching
-public class Application {
+public class Application implements Serializable {
 	public static void main(String[] args) { 
 		SpringApplication.run(Application.class, args);
 	}

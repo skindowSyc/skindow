@@ -54,45 +54,53 @@ public class OracleTOMySql {
             if (StringUtils.isEmpty(s)) {
                 continue;
             }
+            s = s.trim();
             temp = new StringBuilder();
             //转换小写
             temp.append("  `");
             String columnName = s.substring(s.indexOf("\"") + 1, s.lastIndexOf("\"")).toLowerCase();
             temp.append(columnName);
             temp.append("`");
+            //字段类型
+            String s2 = s.split(" ")[1];
             //解析CHAR(
-            if (s.indexOf("CHAR(") > 1) {
+            if (s2.contains("CHAR(")) {
                 //截取括号内的内容
                 String substring = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
                 String s1 = substring.replaceAll("\\D", "");
                 temp.append(" char(" + s1 + ") ");
             }
             //解析VARCHAR2(
-            if (s.indexOf("VARCHAR2(") > 1) {
+            if (s2.contains("VARCHAR2(")) {
                 //截取括号内的内容
                 String substring = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
                 String s1 = substring.replaceAll("\\D", "");
                 temp.append(" varchar(" + s1 + ") ");
             }
             //解析NUMBER
-            if (s.indexOf("NUMBER(") > 1) {
+            if (s2.contains("NUMBER(")) {
                 //截取括号内的内容
                 String substring = s.substring(s.indexOf("(") + 1, s.indexOf(")"));
                 String[] split = substring.split(",");
                 temp.append(" decimal(" + split[0] + "," + split[1] + ")");
             }
-            //解析NUMBER
-            if (s.indexOf("DATE") > 1) {
+            //解析date
+            if (s2.contains("DATE")) {
                 //截取括号内的内容
                 temp.append(" datetime");
             }
+            //解析null
+            if (s.indexOf("NOT NULL") > 0) {
+                temp.append(" NOT NULL");
+            } else {
+                temp.append(" DEFAULT NULL");
+            }
+            //解析注释
             Map<String, String> conKey = parseMapForFilter(stringStringMap, columnName);
             if (MapUtils.isNotEmpty(stringStringMap) && MapUtils.isNotEmpty(conKey)) {
-                temp.append(" DEFAULT NULL COMMENT ' " + conKey.values().toArray()[0] + "',");
-            } else {
-                temp.append(" DEFAULT NULL,");
+                temp.append(" COMMENT ' " + conKey.values().toArray()[0] + "'");
             }
-            temp.append("\n");
+            temp.append(",\n");
             result.append(temp);
         }
         result.append("  `record_create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '数据创建时间',\n" +
@@ -122,7 +130,7 @@ public class OracleTOMySql {
     public static Map<String, String> getAllTableColumn() throws Exception {
         System.out.println("-----------读取字段注释开始-----------");
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://192.168.10.40:3306/data_supply", "root", "TDoal5dSLh");
+        Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://172.16.163.66:3306/data_supply", "dsuser", "dsuser123@");
         // 1、获取数据库所有表
         StringBuilder sbTables = new StringBuilder();
         List<String> tables = new ArrayList<>();

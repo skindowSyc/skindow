@@ -1,14 +1,17 @@
-package com.skindow.test;
+package com.skindow.sql;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static com.skindow.test.OracleTOMySql.getAllTableColumn;
+import static com.skindow.sql.OracleToMySql.getAllTableColumn;
 
 /**
  * @ Author     ：syc.
@@ -20,6 +23,8 @@ import static com.skindow.test.OracleTOMySql.getAllTableColumn;
 public class CoulumnCommentCache {
     //缓存接口这里是LoadingCache，LoadingCache在缓存项不存在时可以自动加载缓存
     public static LoadingCache<String, Map<String, String>> build;
+
+    public static Map<String, String> map = new HashMap<>();
 
     public static CacheBuilder<Object, Object> recordStats
             //CacheBuilder的构造函数是私有的，只能通过其静态方法newBuilder()来获得CacheBuilder的实例
@@ -38,7 +43,7 @@ public class CoulumnCommentCache {
             .recordStats();
 
     public static void initCache() {
-        if (Objects.isNull(build)){
+        if (Objects.isNull(build)) {
             build = recordStats.build(new CacheLoader<String, Map<String, String>>() {
                 @Override
                 public Map<String, String> load(String key) throws Exception {
@@ -49,16 +54,25 @@ public class CoulumnCommentCache {
         }
     }
 
-    public static void main(String[] args) {
-        while (true){
-            new Thread(() -> {
-                initCache();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        Thread thread = new Thread(() -> {
+            initCache();
+            try {
+                map = build.get("");
+                System.out.println("初始化完成");
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            countDownLatch.countDown();
+            try {
+                Thread.sleep(Long.MAX_VALUE);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+        countDownLatch.await();
     }
 }
+

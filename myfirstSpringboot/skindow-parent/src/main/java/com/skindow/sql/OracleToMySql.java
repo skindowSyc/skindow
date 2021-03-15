@@ -1,4 +1,4 @@
-package com.skindow.test;
+package com.skindow.sql;
 
 import org.apache.commons.collections.MapUtils;
 import org.springframework.util.CollectionUtils;
@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,9 @@ import java.util.stream.Collectors;
  * @ Modified By：
  * @ Version:
  */
-public class OracleTOMySql {
+public class OracleToMySql {
 
-    public static final String TABLE_NAME = "ods_03_tinvestmanager";
+    public static final String TABLE_NAME = "ods_03_tcombaccoinfo";
 
     /**
      * 表说明

@@ -1,4 +1,4 @@
-package com.skindow.sql;
+package com.skindow.AQS;
 
 import java.util.concurrent.Semaphore;
 

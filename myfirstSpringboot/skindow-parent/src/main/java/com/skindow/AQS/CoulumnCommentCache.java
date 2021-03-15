@@ -1,4 +1,4 @@
-package com.skindow.sql;
+package com.skindow.AQS;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

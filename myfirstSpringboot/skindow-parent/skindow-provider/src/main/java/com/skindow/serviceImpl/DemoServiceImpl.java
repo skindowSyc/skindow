@@ -6,6 +6,7 @@ import com.skindow.service.DemoService;
 import com.skindow.pojo.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -17,42 +18,44 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DemoServiceImpl implements DemoService {
     @Autowired
-    private RedisTemplate<Serializable, Object>defaultRedisTemplate;
+    private RedisTemplate<Serializable, Object> defaultRedisTemplate;
+
+    @Override
     public String sayHello(String name) {
         return "hey,my name is " + name;
     }
 
+    @Override
     public String sayHello(String name, Integer age) {
-        return "hey,my name is " + name + " I'm "+ age +" years old";
+        return "hey,my name is " + name + " I'm " + age + " years old";
     }
 
     @Override
-    public String testRedis(String key,String value) {
-        if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value))
-        {
-            return "key or value is empty!";
+    @Transactional
+    public String testRedis(String key, String value) {
+        String result = "success";
+        if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {
+            result = "key or value is empty!";
+        } else {//10s有效期
+            defaultRedisTemplate.opsForValue().set(key, value, 60, TimeUnit.SECONDS);
         }
-        //10s有效期
-        defaultRedisTemplate.opsForValue().set(key,value,60, TimeUnit.SECONDS);
-        return "success";
+        return result;
     }
 
     @Override
     public String getValueByKey(String key) {
-        if (StringUtils.isEmpty(key))
-        {
+        if (StringUtils.isEmpty(key)) {
             return "key is empty!";
         }
         return defaultRedisTemplate.opsForValue().get(key).toString();
     }
 
     @Override
-    public String setBook(String key,Book book) {
-        if (book == null)
-        {
+    public String setBook(String key, Book book) {
+        if (book == null) {
             return "book is null!";
         }
-        defaultRedisTemplate.opsForValue().set(key,book);
+        defaultRedisTemplate.opsForValue().set(key, book);
         return "success";
     }
 }

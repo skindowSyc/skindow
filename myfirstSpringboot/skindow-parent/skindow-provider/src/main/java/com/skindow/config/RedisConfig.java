@@ -15,6 +15,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -22,6 +23,7 @@ import java.time.Duration;
 /**redis配置类
  * Created by Administrator on 2019/8/19.
  */
+@Component
 public class RedisConfig {
 
     /**创建redis连接工厂

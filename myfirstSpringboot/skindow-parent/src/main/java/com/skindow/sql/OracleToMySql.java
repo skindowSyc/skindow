@@ -1,5 +1,6 @@
 package com.skindow.sql;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -7,7 +8,6 @@ import org.springframework.util.StringUtils;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +35,10 @@ public class OracleToMySql {
     public static final boolean IS_QL = true;
 
     public static void main(String[] args) throws Exception {
+        Map<String, String> allTableColumn = getAllTableColumn();
+        System.out.println(JSON.toJSONString(allTableColumn));
+    }
+    public static void main_1(String[] args) throws Exception {
         String readFile = readFile(FILE);
         if (StringUtils.isEmpty(readFile)) {
             System.out.println("读取文件内容为空");
@@ -131,7 +135,7 @@ public class OracleToMySql {
     public static Map<String, String> getAllTableColumn() throws Exception {
         System.out.println("-----------读取字段注释开始-----------");
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://172.16.163.66:3306/data_supply", "dsuser", "dsuser123@");
+        Connection conn = java.sql.DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/skindow", "root", "1194169073");
         // 1、获取数据库所有表
         StringBuilder sbTables = new StringBuilder();
         List<String> tables = new ArrayList<>();
@@ -159,6 +163,7 @@ public class OracleToMySql {
                 while (rs.next()) {
                     if (!StringUtils.isEmpty(rs.getString("Comment"))) {
                         map.put(rs.getString("Field"), rs.getString("Comment"));
+                        System.out.println(rs.getString("Type"));
                     }
                 }
             } catch (SQLException e) {

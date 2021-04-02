@@ -1,40 +1,70 @@
 package com.skindow;
 
-import com.skindow.mapper.UserMapper;
-import com.skindow.pojo.User;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SkindowProviderApplication.class)
 @Slf4j
 public class SkindowProviderApplicationTests {
-	@Autowired
-	UserMapper userMapper;
-	@Test
-	public void contextLoads() {
-		List<User> list = new ArrayList<>(100);
-		User user = null;
-		for (int i = 0 ; i < 100 ; i++)
-		{
-			user = new User();
-			user.setId(i);
-			user.setAddress("武汉" + i);
-			user.setAge(i);
-			user.setCountry("中国");
-			user.setName("skindow" + i);
-			list.add(user);
-			user = null;
-		}
-		int i = userMapper.updateUserBatch(list);
-		log.info("总共批量更新了{}条用户信息",i);
-	}
+    @Resource
+    private RedissonClient redissonClient;
 
+    @Test
+    public void contextLoads() {
+        ExecutorService executorService = Executors.newFixedThreadPool(100);
+        for (int i = 0; i < 100; i++) {
+            myThread skindow = new myThread("skindow");
+            skindow.setName("thead_" + i);
+            executorService.submit(skindow);
+        }
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @AllArgsConstructor
+    class myThread extends Thread {
+        private String name;
+
+        @Override
+        public void run() {
+            RLock skindow = redissonClient.getLock(name);
+            while (true) {
+                log.info("{}开始获取锁", Thread.currentThread().getName());
+                skindow.lock(10, TimeUnit.SECONDS);
+                if (skindow.isLocked()) {
+                    log.info("{}获取到锁", Thread.currentThread().getName());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {
+
+                    }
+                    skindow.unlock();
+                    log.info("{}释放锁", Thread.currentThread().getName());
+                    break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
+
+                }
+            }
+
+
+        }
+    }
 }

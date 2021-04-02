@@ -17,7 +17,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @Slf4j
 @Service
-public class ReflectionTest extends Exception implements Cloneable,Serializable,Comparable {
+public class ReflectionTest extends Exception implements Cloneable, Serializable, Comparable {
 
     private static final long serialVersionUID = -5696669667647624450L;
 
@@ -92,8 +92,7 @@ public class ReflectionTest extends Exception implements Cloneable,Serializable,
     }
 
 
-    public ReflectionTest()
-    {
+    public ReflectionTest() {
 
     }
 
@@ -141,26 +140,26 @@ public class ReflectionTest extends Exception implements Cloneable,Serializable,
         return 0;
     }
 
-    public Object ObjectA(){
-        class classA{};
+    public Object ObjectA() {
+        class classA {
+        }
+        ;
         return new classA();
     }
 
-    private String printName (String name,Integer age)
-    {
+    private String printName(String name, Integer age) {
         return new StringBuilder().append(name).append(Integer.toString(age)).toString();
     }
 
-    private <T> T privateMethod(T t)
-    {
+    private <T> T privateMethod(T t) {
         return t;
     }
-    protected void protectedMethod()
-    {
+
+    protected void protectedMethod() {
 
     }
-    void defaultMehtod()
-    {
+
+    void defaultMehtod() {
 
     }
 }

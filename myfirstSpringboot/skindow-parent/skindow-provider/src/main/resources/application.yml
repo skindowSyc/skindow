@@ -18,7 +18,7 @@ spring:
         max-active: -1
   datasource:
     username: root
-    password: ai1194169073
+    password: 1194169073
     url: jdbc:mysql://localhost:3306/skindow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
     driver-class-name: com.mysql.jdbc.Driver
   data:
